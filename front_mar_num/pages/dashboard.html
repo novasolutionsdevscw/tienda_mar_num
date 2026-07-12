@@ -806,12 +806,13 @@
             };
 
             try {
+                const API_BASE = "http://127.0.0.1:8000/api";
                 // Ventas de hoy
                 const [ventasRes, clientesRes, productosRes, reporteRes] = await Promise.allSettled([
-                    fetch('http://localhost/api/ventas', { headers }),
-                    fetch('http://localhost/api/clientes', { headers }),
-                    fetch('http://localhost/api/productos', { headers }),
-                    fetch('http://localhost/api/reportes/diario', { headers }),
+                    fetch(`${API_BASE}/ventas`, { headers }),
+                    fetch(`${API_BASE}/clientes`, { headers }),
+                    fetch(`${API_BASE}/productos?all=1`, { headers }),
+                    fetch(`${API_BASE}/reportes/diario`, { headers }),
                 ]);
 
                 // Clientes
