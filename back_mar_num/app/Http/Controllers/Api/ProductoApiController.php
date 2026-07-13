@@ -18,14 +18,20 @@ class ProductoApiController extends Controller
         $query = Producto::query();
 
         if ($request->filled('buscar')) {
-            $query->where('nombre', 'like', '%'.$request->buscar.'%');
+            $query->where('nombre', 'like', '%' . $request->buscar . '%');
         }
 
         if ($request->filled('activo')) {
             $query->where('activo', $request->activo === '1');
         }
 
-        $productos = $query->orderBy('nombre')->paginate(15);
+        $query->orderBy('nombre');
+
+        if ($request->boolean('all')) {
+            return ProductoResource::collection($query->get());
+        }
+
+        $productos = $query->paginate(15);
 
         return ProductoResource::collection($productos);
     }
