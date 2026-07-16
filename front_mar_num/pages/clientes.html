@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clientes | Tienda Mar &amp; Num</title>
+    <meta name="description" content="Gestión completa de clientes de la Tienda Mar &amp; Num." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+        /* ─── Variables — Paleta Cálida ─────────────────────────────── */
+        :root {
+            --linen:       #F5F1EA;
+            --khaki:       #D7C9B8;
+            --camel:       #B2967D;
+            --cocoa:       #7D5A44;
+            --espresso:    #4A342A;
+
+            --text-dark:   #2C1A12;
+            --text-mid:    #6B4C38;
+            --text-light:  #A08070;
+            --white:       #FFFFFF;
+
+            --sidebar-w:   260px;
+            --topbar-h:    68px;
+            --radius:      12px;
+            --transition:  0.22s cubic-bezier(0.4,0,0.2,1);
+            --shadow-card: 0 2px 16px rgba(74,52,42,0.10);
+            --shadow-md:   0 6px 28px rgba(74,52,42,0.15);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--linen);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           SIDEBAR
+        ══════════════════════════════════════════════════════════ */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: var(--espresso);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+            z-index: 100;
+            transition: transform var(--transition);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 24px 22px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .logo-icon {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--camel), var(--cocoa));
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .logo-icon svg { width: 20px; height: 20px; fill: #fff; }
+
+        .logo-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--linen);
+            line-height: 1.1;
+        }
+        .logo-sub {
+            font-size: 0.68rem;
+            color: var(--khaki);
+            opacity: 0.7;
+            font-weight: 400;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 18px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            overflow-y: auto;
+        }
+
+        .nav-section-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.10em;
+            text-transform: uppercase;
+            color: rgba(215,201,184,0.45);
+            padding: 10px 10px 6px;
+            margin-top: 8px;
+        }
+        .nav-section-label:first-child { margin-top: 0; }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            color: rgba(215,201,184,0.75);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background var(--transition), color var(--transition);
+            position: relative;
+        }
+
+        .nav-link svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.07);
+            color: var(--linen);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, var(--camel), var(--cocoa));
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(125,90,68,0.40);
+        }
+
+        .nav-link .badge {
+            margin-left: auto;
+            background: var(--camel);
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            border-radius: 20px;
+            padding: 1px 7px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 16px 12px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.06);
+            margin-bottom: 8px;
+        }
+
+        .user-avatar {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--camel), var(--espresso));
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .user-name {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--linen);
+            line-height: 1.2;
+        }
+        .user-role {
+            font-size: 0.68rem;
+            color: var(--khaki);
+            opacity: 0.7;
+        }
+
+        .btn-logout {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 9px 12px;
+            border-radius: 9px;
+            background: rgba(239,68,68,0.10);
+            border: 1px solid rgba(239,68,68,0.20);
+            color: #fca5a5;
+            font-size: 0.82rem;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: background var(--transition), color var(--transition);
+        }
+        .btn-logout:hover {
+            background: rgba(239,68,68,0.22);
+            color: #fecaca;
+        }
+        .btn-logout svg { width: 16px; height: 16px; }
+
+        /* ══════════════════════════════════════════════════════════
+           MAIN
+        ══════════════════════════════════════════════════════════ */
+        .main-wrapper {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: var(--topbar-h);
+            background: var(--white);
+            border-bottom: 1px solid var(--khaki);
+            display: flex;
+            align-items: center;
+            padding: 0 28px;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 1px 8px rgba(74,52,42,0.06);
+        }
+
+        .topbar-title { flex: 1; }
+        .topbar-title h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--espresso);
+        }
+        .topbar-title p {
+            font-size: 0.775rem;
+            color: var(--text-light);
+            margin-top: 1px;
+        }
+
+        .main-content { padding: 28px; flex: 1; }
+
+        /* ─── Toolbar ─────────────────────────────────────────────── */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--white);
+            border: 1.5px solid var(--khaki);
+            border-radius: 10px;
+            padding: 9px 14px;
+            flex: 1;
+            min-width: 200px;
+            max-width: 380px;
+            transition: border-color var(--transition);
+        }
+        .search-box:focus-within { border-color: var(--camel); }
+        .search-box svg { width: 16px; height: 16px; color: var(--text-light); flex-shrink: 0; }
+        .search-box input {
+            border: none; outline: none;
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+            width: 100%;
+        }
+        .search-box input::placeholder { color: var(--text-light); }
+
+        .filter-select {
+            background: var(--white);
+            border: 1.5px solid var(--khaki);
+            border-radius: 10px;
+            padding: 9px 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            color: var(--text-mid);
+            cursor: pointer;
+            outline: none;
+            transition: border-color var(--transition);
+        }
+        .filter-select:focus { border-color: var(--camel); }
+
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 18px;
+            background: linear-gradient(135deg, var(--camel), var(--cocoa));
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity var(--transition), box-shadow var(--transition);
+            white-space: nowrap;
+        }
+        .btn-primary:hover { opacity: 0.88; box-shadow: 0 4px 16px rgba(125,90,68,0.30); }
+        .btn-primary svg { width: 16px; height: 16px; }
+
+        /* ─── Tabla ─────────────────────────────────────────────── */
+        .panel-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-card);
+            border: 1px solid rgba(215,201,184,0.5);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 22px;
+            border-bottom: 1px solid var(--linen);
+        }
+        .panel-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--espresso);
+        }
+        .panel-header p { font-size: 0.75rem; color: var(--text-light); margin-top: 2px; }
+        .total-badge {
+            background: var(--linen);
+            border: 1px solid var(--khaki);
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--cocoa);
+        }
+
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        thead th {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-light);
+            padding: 10px 16px;
+            text-align: left;
+            background: var(--linen);
+            border-bottom: 1px solid var(--khaki);
+        }
+        tbody tr {
+            border-bottom: 1px solid rgba(215,201,184,0.35);
+            transition: background var(--transition);
+        }
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background: rgba(245,241,234,0.6); }
+        tbody td {
+            padding: 14px 16px;
+            font-size: 0.85rem;
+            color: var(--text-mid);
+            vertical-align: middle;
+        }
+
+        .client-name {
+            font-weight: 600;
+            color: var(--espresso);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .client-avatar {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--camel), var(--espresso));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .badge-deuda {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .badge-sin-deuda { background: rgba(108,163,108,0.15); color: #4a7c4a; }
+        .badge-con-deuda { background: rgba(192,112,112,0.15); color: #8b3a3a; }
+
+        .actions-cell { display: flex; align-items: center; gap: 6px; }
+        .btn-icon {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background var(--transition), transform var(--transition);
+        }
+        .btn-icon svg { width: 15px; height: 15px; }
+        .btn-icon:active { transform: scale(0.92); }
+        .btn-view   { background: rgba(178,150,125,0.15); color: var(--camel); }
+        .btn-edit   { background: rgba(125,90,68,0.12); color: var(--cocoa); }
+        .btn-delete { background: rgba(239,68,68,0.10); color: #c05050; }
+        .btn-view:hover   { background: rgba(178,150,125,0.30); }
+        .btn-edit:hover   { background: rgba(125,90,68,0.22); }
+        .btn-delete:hover { background: rgba(239,68,68,0.20); }
+
+        /* Paginación */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 22px;
+            border-top: 1px solid var(--linen);
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .pagination-info { font-size: 0.78rem; color: var(--text-light); }
+        .pagination-btns { display: flex; gap: 6px; }
+        .btn-page {
+            width: 34px; height: 34px;
+            border-radius: 8px;
+            border: 1.5px solid var(--khaki);
+            background: var(--white);
+            color: var(--text-mid);
+            font-size: 0.82rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-page:hover:not(:disabled) { border-color: var(--camel); color: var(--cocoa); }
+        .btn-page.active { background: linear-gradient(135deg, var(--camel), var(--cocoa)); border-color: transparent; color: #fff; }
+        .btn-page:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 48px 16px;
+            color: var(--text-light);
+        }
+        .empty-state svg { width: 48px; height: 48px; opacity: 0.35; margin-bottom: 12px; }
+        .empty-state p { font-size: 0.9rem; }
+        .empty-state .sub { font-size: 0.78rem; margin-top: 4px; }
+
+        /* Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, var(--linen) 25%, var(--khaki) 50%, var(--linen) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
+            border-radius: 6px;
+            height: 14px;
+        }
+        @keyframes shimmer {
+            0%   { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ─── MODAL ─────────────────────────────────────────────── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(44,26,18,0.45);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s;
+        }
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: 18px;
+            box-shadow: var(--shadow-md);
+            width: 100%;
+            max-width: 500px;
+            transform: translateY(20px) scale(0.97);
+            transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+        }
+        .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 22px 26px 18px;
+            border-bottom: 1px solid var(--linen);
+        }
+        .modal-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--espresso);
+        }
+        .btn-close-modal {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: var(--linen);
+            color: var(--text-light);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background var(--transition);
+        }
+        .btn-close-modal:hover { background: var(--khaki); }
+        .btn-close-modal svg { width: 16px; height: 16px; }
+
+        .modal-body { padding: 22px 26px; }
+
+        .form-group { margin-bottom: 18px; }
+        .form-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-mid);
+            margin-bottom: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid var(--khaki);
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+            background: var(--white);
+            transition: border-color var(--transition);
+            outline: none;
+        }
+        .form-control:focus { border-color: var(--camel); }
+        .form-hint { font-size: 0.73rem; color: var(--text-light); margin-top: 5px; }
+        .form-error { font-size: 0.73rem; color: #c05050; margin-top: 5px; display: none; }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            padding: 16px 26px 22px;
+        }
+        .btn-secondary {
+            padding: 9px 18px;
+            border: 1.5px solid var(--khaki);
+            background: transparent;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-mid);
+            cursor: pointer;
+            transition: background var(--transition);
+        }
+        .btn-secondary:hover { background: var(--linen); }
+
+        /* Modal detalle cliente */
+        .modal-wide { max-width: 680px; }
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .detail-item {}
+        .detail-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-light); margin-bottom: 3px; }
+        .detail-value { font-size: 0.9rem; font-weight: 500; color: var(--espresso); }
+        .detail-value.debt { color: #8b3a3a; font-weight: 700; }
+
+        .deudas-list { margin-top: 8px; }
+        .deuda-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: var(--linen);
+            margin-bottom: 8px;
+            border: 1px solid var(--khaki);
+        }
+        .deuda-item:last-child { margin-bottom: 0; }
+        .deuda-monto { font-weight: 600; color: var(--espresso); font-size: 0.88rem; }
+        .deuda-fecha { font-size: 0.74rem; color: var(--text-light); }
+        .deuda-estado {
+            font-size: 0.7rem; font-weight: 600;
+            padding: 2px 8px; border-radius: 12px;
+        }
+        .estado-pendiente { background: rgba(192,112,112,0.15); color: #8b3a3a; }
+        .estado-pagado    { background: rgba(108,163,108,0.15); color: #4a7c4a; }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 24px; right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 500;
+        }
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            background: var(--espresso);
+            color: var(--linen);
+            font-size: 0.855rem;
+            font-weight: 500;
+            box-shadow: 0 4px 20px rgba(74,52,42,0.30);
+            transform: translateX(110%);
+            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+            min-width: 260px;
+            max-width: 360px;
+        }
+        .toast.show { transform: translateX(0); }
+        .toast.success { background: #2d5a2d; }
+        .toast.error   { background: #7a2525; }
+        .toast svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+        /* ─── Modal Confirm ─────────────────────────────────────── */
+        .confirm-icon {
+            width: 56px; height: 56px;
+            border-radius: 16px;
+            background: rgba(239,68,68,0.10);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px;
+        }
+        .confirm-icon svg { width: 28px; height: 28px; color: #c05050; }
+        .confirm-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            text-align: center;
+            color: var(--espresso);
+            margin-bottom: 8px;
+        }
+        .confirm-text { font-size: 0.85rem; color: var(--text-mid); text-align: center; line-height: 1.5; }
+        .btn-danger {
+            padding: 9px 18px;
+            background: #c05050;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity var(--transition);
+        }
+        .btn-danger:hover { opacity: 0.85; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-wrapper { margin-left: 0; }
+            .detail-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 500px) {
+            .main-content { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4H6zm1.5 0h9L19 5H5l2.5-3zM12 12a3 3 0 110-6 3 3 0 010 6z"/>
+                </svg>
+            </div>
+            <div>
+                <div class="logo-name">Mar &amp; Num</div>
+                <div class="logo-sub">Sistema de gestión</div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <span class="nav-section-label">Principal</span>
+
+            <a href="dashboard.html" class="nav-link" id="nav-dashboard">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                Dashboard
+            </a>
+
+            <a href="nuevaVenta.html" class="nav-link" id="nav-ventas">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+                Ventas
+            </a>
+
+            <span class="nav-section-label">Gestión</span>
+
+            <a href="clientes.html" class="nav-link active" id="nav-clientes">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                Clientes
+            </a>
+
+            <a href="productos.html" class="nav-link" id="nav-productos">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/>
+                </svg>
+                Productos
+            </a>
+
+            <a href="fiados.html" class="nav-link" id="nav-deudas">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Fiados
+                <span class="badge" id="badge-deudas">—</span>
+            </a>
+
+            <span class="nav-section-label">Reportes</span>
+
+            <a href="#" class="nav-link" id="nav-reportes">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                Control Diario
+            </a>
+
+            <a href="#" class="nav-link" id="nav-usuarios" style="display:none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+                Usuarios
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-card">
+                <div class="user-avatar" id="userAvatar">W</div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">Cargando...</div>
+                    <div class="user-role" id="userRole">—</div>
+                </div>
+            </div>
+            <button class="btn-logout" id="btnLogout">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                Cerrar sesión
+            </button>
+        </div>
+    </aside>
+
+    <!-- ═══════════════════ MAIN ═══════════════════ -->
+    <div class="main-wrapper">
+
+        <header class="topbar">
+            <div class="topbar-title">
+                <h2>Clientes</h2>
+                <p>Gestión completa de clientes</p>
+            </div>
+            <button class="btn-primary" id="btnNuevoCliente">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                </svg>
+                Nuevo Cliente
+            </button>
+        </header>
+
+        <main class="main-content">
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="search-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Buscar por nombre o teléfono..." />
+                </div>
+                <select class="filter-select" id="filterDeuda">
+                    <option value="">Todos los clientes</option>
+                    <option value="1">Con deuda</option>
+                    <option value="0">Sin deuda</option>
+                </select>
+            </div>
+
+            <!-- Tabla -->
+            <div class="panel-card">
+                <div class="panel-header">
+                    <div>
+                        <h3>Lista de Clientes</h3>
+                        <p>Todos los clientes registrados</p>
+                    </div>
+                    <span class="total-badge" id="totalBadge">— clientes</span>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Teléfono</th>
+                                <th>Dirección</th>
+                                <th>Saldo Deuda</th>
+                                <th>Estado</th>
+                                <th>Registro</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientesTableBody">
+                            <tr>
+                                <td colspan="7" style="text-align:center; padding:32px; color:var(--text-light);">Cargando clientes...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pagination" id="paginationContainer" style="display:none;">
+                    <span class="pagination-info" id="paginationInfo"></span>
+                    <div class="pagination-btns" id="paginationBtns"></div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ═══════════════════ MODAL: CREAR / EDITAR ═══════════════════ -->
+    <div class="modal-overlay" id="modalFormOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalFormTitle">Nuevo Cliente</h3>
+                <button class="btn-close-modal" id="btnCloseModalForm">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="clienteForm" novalidate>
+                    <input type="hidden" id="clienteId" />
+                    <div class="form-group">
+                        <label class="form-label" for="inputNombre">Nombre completo *</label>
+                        <input type="text" class="form-control" id="inputNombre" placeholder="Ej: María García" required />
+                        <div class="form-error" id="errNombre">El nombre es obligatorio.</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="inputTelefono">Teléfono</label>
+                        <input type="tel" class="form-control" id="inputTelefono" placeholder="Ej: 310 456 7890" />
+                        <div class="form-hint">Opcional. Máx. 20 caracteres.</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="inputDireccion">Dirección</label>
+                        <input type="text" class="form-control" id="inputDireccion" placeholder="Ej: Calle 5 #12-34, Barrio Centro" />
+                        <div class="form-hint">Opcional. Máx. 150 caracteres.</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="btnCancelForm">Cancelar</button>
+                <button class="btn-primary" id="btnSaveCliente">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span id="btnSaveText">Guardar Cliente</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ MODAL: DETALLE CLIENTE ═══════════════════ -->
+    <div class="modal-overlay" id="modalDetailOverlay">
+        <div class="modal modal-wide">
+            <div class="modal-header">
+                <h3 id="modalDetailTitle">Detalle del Cliente</h3>
+                <button class="btn-close-modal" id="btnCloseModalDetail">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" id="modalDetailBody">
+                <!-- Cargado dinámicamente -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="btnCloseDetailFooter">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ MODAL: CONFIRMAR ELIMINAR ═══════════════════ -->
+    <div class="modal-overlay" id="modalConfirmOverlay">
+        <div class="modal" style="max-width:400px;">
+            <div class="modal-body" style="padding-top:28px;">
+                <div class="confirm-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                </div>
+                <div class="confirm-title">¿Eliminar Cliente?</div>
+                <div class="confirm-text" id="confirmText">¿Estás seguro de que deseas eliminar este cliente? Esta acción no se puede deshacer.</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="btnCancelConfirm">Cancelar</button>
+                <button class="btn-danger" id="btnConfirmDelete">Sí, eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="../services/auth.service.js"></script>
+    <script>
+        const API = 'http://127.0.0.1:8000/api';
+
+        // ─── Guard ───────────────────────────────────────────────
+        AuthService.requireAuth();
+
+        // ─── Estado ──────────────────────────────────────────────
+        let currentPage    = 1;
+        let totalPages     = 1;
+        let deleteClienteId = null;
+        let searchTimer    = null;
+        let editMode       = false;
+
+        function getHeaders() {
+            return {
+                'Content-Type': 'application/json',
+                'Accept':       'application/json',
+                'Authorization': `Bearer ${AuthService.getToken()}`
+            };
+        }
+
+        // ─── Usuario ─────────────────────────────────────────────
+        (function loadUser() {
+            const user = AuthService.getUser();
+            if (!user) return;
+            const nombre = user.nombre_usuario || user.usuario || 'Usuario';
+            document.getElementById('userName').textContent   = nombre;
+            document.getElementById('userRole').textContent   = user.rol === 'ADMIN' ? '⭐ Administrador' : 'Ayudante';
+            document.getElementById('userAvatar').textContent = nombre.charAt(0).toUpperCase();
+            if (user.rol === 'ADMIN') document.getElementById('nav-usuarios').style.display = 'flex';
+        })();
+
+        // ─── Cargar clientes ─────────────────────────────────────
+        async function loadClientes(page = 1) {
+            const buscar    = document.getElementById('searchInput').value.trim();
+            const con_deuda = document.getElementById('filterDeuda').value;
+
+            let url = `${API}/clientes?page=${page}`;
+            if (buscar)    url += `&buscar=${encodeURIComponent(buscar)}`;
+            if (con_deuda !== '') url += `&con_deuda=${con_deuda}`;
+
+            const tbody = document.getElementById('clientesTableBody');
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:32px;"><span class="skeleton" style="width:200px;display:inline-block;"></span></td></tr>`;
+
+            try {
+                const res  = await fetch(url, { headers: getHeaders() });
+                const json = await res.json();
+
+                if (!res.ok) throw new Error(json.message || 'Error al cargar clientes.');
+
+                const { data, meta } = json;
+                renderTabla(data);
+                renderPagination(meta);
+                document.getElementById('totalBadge').textContent = `${meta.total} clientes`;
+                currentPage = meta.current_page;
+                totalPages  = meta.last_page;
+
+                // Badge deudas
+                loadBadgeDeudas();
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:32px;color:#c05050;">${err.message}</td></tr>`;
+                showToast(err.message, 'error');
+            }
+        }
+
+        function renderTabla(clientes) {
+            const tbody = document.getElementById('clientesTableBody');
+            if (!clientes || clientes.length === 0) {
+                tbody.innerHTML = `
+                    <tr><td colspan="7">
+                        <div class="empty-state">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            <p>No se encontraron clientes</p>
+                            <div class="sub">Prueba con otro filtro o registra un cliente nuevo</div>
+                        </div>
+                    </td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = clientes.map(c => {
+                const tieneDeuda = parseFloat(c.saldo_deuda) > 0;
+                const fecha = c.fecha_registro
+                    ? new Date(c.fecha_registro).toLocaleDateString('es-CO', { day:'2-digit', month:'short', year:'numeric' })
+                    : '—';
+                return `
+                <tr>
+                    <td>
+                        <div class="client-name">
+                            <div class="client-avatar">${c.nombre.charAt(0).toUpperCase()}</div>
+                            ${escHTML(c.nombre)}
+                        </div>
+                    </td>
+                    <td>${escHTML(c.telefono || '—')}</td>
+                    <td style="max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHTML(c.direccion || '—')}</td>
+                    <td style="font-weight:600;color:${tieneDeuda ? '#8b3a3a' : 'var(--espresso)'};">
+                        $${formatMoney(c.saldo_deuda)}
+                    </td>
+                    <td>
+                        <span class="badge-deuda ${tieneDeuda ? 'badge-con-deuda' : 'badge-sin-deuda'}">
+                            ${tieneDeuda ? 'Con deuda' : 'Al día'}
+                        </span>
+                    </td>
+                    <td>${fecha}</td>
+                    <td>
+                        <div class="actions-cell">
+                            <button class="btn-icon btn-view" title="Ver detalle" onclick="verDetalle(${c.id})">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                            </button>
+                            <button class="btn-icon btn-edit" title="Editar" onclick="editarCliente(${c.id}, '${escAttr(c.nombre)}', '${escAttr(c.telefono||'')}', '${escAttr(c.direccion||'')}')">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                            </button>
+                            <button class="btn-icon btn-delete" title="Eliminar" onclick="confirmarEliminar(${c.id}, '${escAttr(c.nombre)}')">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        function renderPagination(meta) {
+            const container = document.getElementById('paginationContainer');
+            const info      = document.getElementById('paginationInfo');
+            const btns      = document.getElementById('paginationBtns');
+
+            if (!meta || meta.last_page <= 1) { container.style.display = 'none'; return; }
+            container.style.display = 'flex';
+            info.textContent = `Mostrando ${meta.from}–${meta.to} de ${meta.total}`;
+
+            let html = `<button class="btn-page" ${meta.current_page === 1 ? 'disabled' : ''} onclick="loadClientes(${meta.current_page - 1})">‹</button>`;
+            for (let i = 1; i <= meta.last_page; i++) {
+                if (i === 1 || i === meta.last_page || Math.abs(i - meta.current_page) <= 1) {
+                    html += `<button class="btn-page ${i === meta.current_page ? 'active' : ''}" onclick="loadClientes(${i})">${i}</button>`;
+                } else if (Math.abs(i - meta.current_page) === 2) {
+                    html += `<button class="btn-page" disabled>…</button>`;
+                }
+            }
+            html += `<button class="btn-page" ${meta.current_page === meta.last_page ? 'disabled' : ''} onclick="loadClientes(${meta.current_page + 1})">›</button>`;
+            btns.innerHTML = html;
+        }
+
+        async function loadBadgeDeudas() {
+            try {
+                const res  = await fetch(`${API}/deudas?estado=PENDIENTE&per_page=1`, { headers: getHeaders() });
+                const json = await res.json();
+                if (json.data && json.data.meta) {
+                    document.getElementById('badge-deudas').textContent = json.data.meta.total || 0;
+                }
+            } catch {}
+        }
+
+        // ─── Ver detalle ─────────────────────────────────────────
+        async function verDetalle(id) {
+            openModal('modalDetailOverlay');
+            document.getElementById('modalDetailBody').innerHTML = `<div style="text-align:center;padding:24px;"><span class="skeleton" style="width:180px;height:14px;display:inline-block;"></span></div>`;
+
+            try {
+                const res  = await fetch(`${API}/clientes/${id}`, { headers: getHeaders() });
+                const json = await res.json();
+                if (!res.ok) throw new Error(json.message || 'Error al cargar detalle.');
+
+                const c = json.data;
+                document.getElementById('modalDetailTitle').textContent = c.nombre;
+
+                const deudas = c.deudas || [];
+                const deudaHTML = deudas.length === 0
+                    ? `<p style="font-size:0.82rem;color:var(--text-light);margin-top:8px;">Sin deudas registradas</p>`
+                    : deudas.map(d => `
+                        <div class="deuda-item">
+                            <div>
+                                <div class="deuda-monto">$${formatMoney(d.saldo_pendiente)} pendiente</div>
+                                <div class="deuda-fecha">Monto original: $${formatMoney(d.monto)} · ${d.fecha ? new Date(d.fecha).toLocaleDateString('es-CO') : '—'}</div>
+                            </div>
+                            <span class="deuda-estado ${d.estado === 'PAGADO' ? 'estado-pagado' : 'estado-pendiente'}">${d.estado}</span>
+                        </div>`).join('');
+
+                document.getElementById('modalDetailBody').innerHTML = `
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Nombre</div>
+                            <div class="detail-value">${escHTML(c.nombre)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Teléfono</div>
+                            <div class="detail-value">${escHTML(c.telefono || '—')}</div>
+                        </div>
+                        <div class="detail-item" style="grid-column:1/-1;">
+                            <div class="detail-label">Dirección</div>
+                            <div class="detail-value">${escHTML(c.direccion || '—')}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Saldo Deuda</div>
+                            <div class="detail-value debt">$${formatMoney(c.saldo_deuda)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Fecha de Registro</div>
+                            <div class="detail-value">${c.fecha_registro ? new Date(c.fecha_registro).toLocaleDateString('es-CO', {day:'2-digit',month:'long',year:'numeric'}) : '—'}</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="detail-label" style="margin-bottom:10px;">Deudas / Fiados</div>
+                        <div class="deudas-list">${deudaHTML}</div>
+                    </div>`;
+            } catch (err) {
+                document.getElementById('modalDetailBody').innerHTML = `<p style="color:#c05050;text-align:center;">${err.message}</p>`;
+            }
+        }
+
+        // ─── Crear / editar ───────────────────────────────────────
+        function abrirModalCrear() {
+            editMode = false;
+            document.getElementById('modalFormTitle').textContent  = 'Nuevo Cliente';
+            document.getElementById('btnSaveText').textContent     = 'Guardar Cliente';
+            document.getElementById('clienteId').value    = '';
+            document.getElementById('inputNombre').value  = '';
+            document.getElementById('inputTelefono').value = '';
+            document.getElementById('inputDireccion').value = '';
+            document.getElementById('errNombre').style.display = 'none';
+            openModal('modalFormOverlay');
+        }
+
+        function editarCliente(id, nombre, telefono, direccion) {
+            editMode = true;
+            document.getElementById('modalFormTitle').textContent  = 'Editar Cliente';
+            document.getElementById('btnSaveText').textContent     = 'Actualizar Cliente';
+            document.getElementById('clienteId').value    = id;
+            document.getElementById('inputNombre').value  = nombre;
+            document.getElementById('inputTelefono').value = telefono;
+            document.getElementById('inputDireccion').value = direccion;
+            document.getElementById('errNombre').style.display = 'none';
+            openModal('modalFormOverlay');
+        }
+
+        async function guardarCliente() {
+            const id       = document.getElementById('clienteId').value;
+            const nombre   = document.getElementById('inputNombre').value.trim();
+            const telefono = document.getElementById('inputTelefono').value.trim();
+            const direccion= document.getElementById('inputDireccion').value.trim();
+
+            // Validación simple
+            if (!nombre) {
+                document.getElementById('errNombre').style.display = 'block';
+                document.getElementById('inputNombre').focus();
+                return;
+            }
+            document.getElementById('errNombre').style.display = 'none';
+
+            const body = { nombre_cliente: nombre };
+            if (telefono)  body.telefono_cliente  = telefono;
+            if (direccion) body.direccion_cliente = direccion;
+
+            const btn = document.getElementById('btnSaveCliente');
+            btn.disabled = true;
+
+            try {
+                const url    = editMode ? `${API}/clientes/${id}` : `${API}/clientes`;
+                const method = editMode ? 'PUT' : 'POST';
+                const res    = await fetch(url, { method, headers: getHeaders(), body: JSON.stringify(body) });
+                const json   = await res.json();
+                if (!res.ok) throw new Error(json.message || 'Error al guardar.');
+                closeModal('modalFormOverlay');
+                showToast(json.message || 'Cliente guardado correctamente.', 'success');
+                loadClientes(currentPage);
+            } catch (err) {
+                showToast(err.message, 'error');
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        // ─── Eliminar ─────────────────────────────────────────────
+        function confirmarEliminar(id, nombre) {
+            deleteClienteId = id;
+            document.getElementById('confirmText').textContent = `¿Estás seguro de que deseas eliminar a "${nombre}"? Esta acción no se puede deshacer.`;
+            openModal('modalConfirmOverlay');
+        }
+
+        async function eliminarCliente() {
+            if (!deleteClienteId) return;
+            const btn = document.getElementById('btnConfirmDelete');
+            btn.disabled = true;
+            try {
+                const res  = await fetch(`${API}/clientes/${deleteClienteId}`, { method: 'DELETE', headers: getHeaders() });
+                const json = await res.json();
+                if (!res.ok) throw new Error(json.message || 'No se pudo eliminar.');
+                closeModal('modalConfirmOverlay');
+                showToast(json.message || 'Cliente eliminado.', 'success');
+                loadClientes(currentPage);
+            } catch (err) {
+                closeModal('modalConfirmOverlay');
+                showToast(err.message, 'error');
+            } finally {
+                btn.disabled = false;
+                deleteClienteId = null;
+            }
+        }
+
+        // ─── Modales ─────────────────────────────────────────────
+        function openModal(id)  { document.getElementById(id).classList.add('open'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+        // ─── Toast ───────────────────────────────────────────────
+        function showToast(msg, type = 'default') {
+            const cont  = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icon = type === 'success'
+                ? `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`
+                : type === 'error'
+                ? `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>`
+                : `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+            toast.innerHTML = `${icon}<span>${escHTML(msg)}</span>`;
+            cont.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.add('show'));
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3500);
+        }
+
+        // ─── Helpers ─────────────────────────────────────────────
+        function escHTML(str) {
+            return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+        function escAttr(str) {
+            return String(str ?? '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        }
+        function formatMoney(val) {
+            return parseFloat(val || 0).toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // ─── Listeners ───────────────────────────────────────────
+        document.getElementById('btnNuevoCliente').addEventListener('click', abrirModalCrear);
+        document.getElementById('btnSaveCliente').addEventListener('click', guardarCliente);
+        document.getElementById('btnCancelForm').addEventListener('click',  () => closeModal('modalFormOverlay'));
+        document.getElementById('btnCloseModalForm').addEventListener('click', () => closeModal('modalFormOverlay'));
+        document.getElementById('btnCloseModalDetail').addEventListener('click', () => closeModal('modalDetailOverlay'));
+        document.getElementById('btnCloseDetailFooter').addEventListener('click', () => closeModal('modalDetailOverlay'));
+        document.getElementById('btnCancelConfirm').addEventListener('click', () => closeModal('modalConfirmOverlay'));
+        document.getElementById('btnConfirmDelete').addEventListener('click', eliminarCliente);
+
+        document.getElementById('btnLogout').addEventListener('click', async () => {
+            await AuthService.logout();
+            window.location.href = 'login.html';
+        });
+
+        // Click outside modal to close
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+        });
+
+        // Búsqueda con debounce
+        document.getElementById('searchInput').addEventListener('input', () => {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => loadClientes(1), 400);
+        });
+        document.getElementById('filterDeuda').addEventListener('change', () => loadClientes(1));
+
+        // Enter en formulario
+        document.getElementById('clienteForm').addEventListener('keydown', e => {
+            if (e.key === 'Enter') { e.preventDefault(); guardarCliente(); }
+        });
+
+        // ─── Inicializar ─────────────────────────────────────────
+        loadClientes(1);
+    </script>
+</body>
+</html>
