@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePagoRequest;
+use App\Http\Requests\UpdateDeudaRequest;
 use App\Http\Resources\DeudaResource;
 use App\Http\Resources\PagoResource;
 use App\Models\Deuda;
@@ -45,6 +46,45 @@ class DeudaApiController extends Controller
         ]);
     }
 
+    public function update(UpdateDeudaRequest $request, Deuda $deuda): JsonResponse
+    {
+        $deuda->update($request->validated());
+        $deuda->refresh()->load(['cliente', 'venta']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Deuda actualizada correctamente.',
+            'data' => new DeudaResource($deuda)
+        ]);
+    }
+
+    public function destroy(Deuda $deuda): JsonResponse
+    {
+        if ($deuda->pagos()->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se puede eliminar una deuda que ya tiene pagos registrados.'
+            ], 422);
+        }
+
+        $cliente = $deuda->cliente;
+
+        $deuda->delete();
+
+        // Recalcular saldo del cliente
+        if ($cliente) {
+            $nuevoSaldo = Deuda::where('cliente_id', $cliente->id_cliente)
+                ->where('estado', 'PENDIENTE')
+                ->sum('saldo_pendiente');
+            $cliente->update(['saldo_deuda' => $nuevoSaldo]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Deuda eliminada correctamente.'
+        ]);
+    }
+
     public function storePago(StorePagoRequest $request, Deuda $deuda): JsonResponse
     {
         if ($deuda->estado === 'PAGADO') {
@@ -56,7 +96,7 @@ class DeudaApiController extends Controller
 
         $pago = Pago::create([
             'deuda_id' => $deuda->id,
-            'monto' => $request->monto,
+            'monto'    => $request->monto,
         ]);
 
         $deuda->refresh();
@@ -64,8 +104,33 @@ class DeudaApiController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Pago registrado correctamente.',
-            'pago' => new PagoResource($pago),
-            'deuda' => new DeudaResource($deuda)
+            'pago'    => new PagoResource($pago),
+            'deuda'   => new DeudaResource($deuda)
         ], 201);
+    }
+
+    public function destroyPago(Pago $pago): JsonResponse
+    {
+        $deuda = $pago->deuda;
+
+        if ($deuda && $deuda->estado === 'PAGADO') {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se puede eliminar un pago de una deuda ya marcada como pagada.'
+            ], 422);
+        }
+
+        $pago->delete();
+
+        // Recargar estado de la deuda
+        if ($deuda) {
+            $deuda->refresh()->load(['cliente']);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pago eliminado correctamente.',
+            'deuda'   => $deuda ? new DeudaResource($deuda) : null
+        ]);
     }
 }

@@ -63,7 +63,11 @@ Route::middleware(['auth:sanctum', 'active'])->group(function () {
     // Deudas y Pagos
     Route::get('/deudas', [DeudaApiController::class, 'index']);
     Route::get('/deudas/{deuda}', [DeudaApiController::class, 'show']);
+    Route::put('/deudas/{deuda}', [DeudaApiController::class, 'update']);
+    Route::patch('/deudas/{deuda}', [DeudaApiController::class, 'update']);
+    Route::delete('/deudas/{deuda}', [DeudaApiController::class, 'destroy']);
     Route::post('/deudas/{deuda}/pagos', [DeudaApiController::class, 'storePago']);
+    Route::delete('/pagos/{pago}', [DeudaApiController::class, 'destroyPago']);
 
     // Control Diario
     Route::apiResource('control-diario', ControlDiarioApiController::class);
