@@ -288,6 +288,7 @@ class VentaApiController extends Controller
             $venta->update([
                 'cliente_id' => $request->cliente_id,
                 'tipo_pago' => $request->tipo_pago,
+                'medio_pago' => $request->medio_pago,
                 'estado' =>
                     $request->tipo_pago === 'FIADO'
                         ? 'FIADA'

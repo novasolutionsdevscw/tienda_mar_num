@@ -26,6 +26,14 @@ class DeudaApiController extends Controller
             $query->where('cliente_id', $request->cliente_id);
         }
 
+        if ($request->filled('buscar')) {
+            $buscar = $request->buscar;
+            $query->whereHas('cliente', function ($q) use ($buscar) {
+                $q->where('nombre_cliente', 'like', '%'.$buscar.'%')
+                    ->orWhere('telefono_cliente', 'like', '%'.$buscar.'%');
+            });
+        }
+
         $deudas = $query->latest('fecha')->paginate(15);
         $totalPendiente = Deuda::where('estado', 'PENDIENTE')->sum('saldo_pendiente');
 

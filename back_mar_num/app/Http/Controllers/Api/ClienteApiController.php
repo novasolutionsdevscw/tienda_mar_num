@@ -32,7 +32,13 @@ class ClienteApiController extends Controller
             }
         }
 
-        $clientes = $query->orderBy('nombre_cliente')->paginate(15);
+        $query->orderBy('nombre_cliente');
+
+        if ($request->boolean('all')) {
+            return ClienteResource::collection($query->get());
+        }
+
+        $clientes = $query->paginate(15);
 
         return ClienteResource::collection($clientes);
     }

@@ -1,9 +1,10 @@
 /**
  * Servicio de Autenticación - Tienda Mar & Num
  * Maneja la comunicación con la API de Laravel para autenticación
+ *
+ * DEPENDENCIA: js/config.js debe cargarse ANTES de este archivo
+ * para que la constante global `API_URL` esté disponible.
  */
-
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
 
 const AuthService = {
 
@@ -14,7 +15,7 @@ const AuthService = {
      * @returns {Promise<Object>} Datos del usuario y token
      */
     async login(email, password) {
-        const response = await fetch(`${API_BASE_URL}/login`, {
+        const response = await fetch(`${API_URL}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -46,7 +47,7 @@ const AuthService = {
      * @returns {Promise<Object>}
      */
     async loginConUsuario(usuario, password) {
-        const response = await fetch(`${API_BASE_URL}/login`, {
+        const response = await fetch(`${API_URL}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -79,7 +80,7 @@ const AuthService = {
         const token = this.getToken();
         if (token) {
             try {
-                await fetch(`${API_BASE_URL}/logout`, {
+                await fetch(`${API_URL}/logout`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -100,7 +101,7 @@ const AuthService = {
      */
     async getMe() {
         const token = this.getToken();
-        const response = await fetch(`${API_BASE_URL}/me`, {
+        const response = await fetch(`${API_URL}/me`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

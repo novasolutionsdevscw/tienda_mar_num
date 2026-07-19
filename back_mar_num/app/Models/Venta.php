@@ -21,6 +21,7 @@ class Venta extends Model
         'mesa_id',
         'estado',
         'tipo_pago',
+        'medio_pago',
         'total',
     ];
 
